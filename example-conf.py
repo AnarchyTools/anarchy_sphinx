@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 swift_search_path = [ "../src" ]
-extensions = ["swiftDomain"]
+extensions = ["swift_domain"]
 
 templates_path = ['_templates']
 
