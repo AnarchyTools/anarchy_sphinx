@@ -1,0 +1,45 @@
+{#
+    basic/domainindex.html
+    ~~~~~~~~~~~~~~~~~~~~~~
+
+    Template for domain indices (module index, ...).
+
+    :copyright: Copyright 2016 by Johannes Schriewer.
+    :license: BSD, see LICENSE for details.
+#}
+{%- extends "layout.html" %}
+{% set title = indextitle %}
+{% block body %}
+
+   {%- set groupid = idgen() %}
+   <div class="section">
+
+   <h1>{{ indextitle }}</h1>
+
+   <nav class="jumpbox">
+      <ul>
+         {%- for (letter, entries) in content %}
+         <li><a href="#cap-{{ letter }}">{{ letter }}</a></li>
+         {%- endfor %}
+      </ul>
+   </nav>
+
+   <ul class="index">
+   {%- for letter, entries in content %}
+     <li><span class="letter">{{ letter }}</span>
+
+     <ul>
+     {%- for (name, grouptype, page, anchor, extra, qualifier, description)
+             in entries %}
+       <li>
+         <code><a href="{{ pathto(page) }}#{{ anchor }}">{{ name|e }}</a></code>
+         {%- if extra %} <em>({{ extra|e }})</em>{% endif -%}
+         {%- if description %}<p>{{ description|e }}</p>{% endif -%}
+       </li>
+     {%- endfor %}
+     </ul>
+     </li>
+   {%- endfor %}
+   </ul>
+   </div>
+{% endblock %}

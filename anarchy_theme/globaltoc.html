@@ -1,0 +1,24 @@
+{#
+    basic/globaltoc.html
+    ~~~~~~~~~~~~~~~~~~~~
+
+    Sphinx sidebar template: global table of contents.
+
+    :copyright: Copyright 2016 by Johannes Schriewer
+    :license: BSD, see LICENSE for details.
+#}
+<h3>{{ _('Table Of Contents') }}</h3>
+
+<ul class="parent">
+  <li>
+    <a href="{{ pathto(master_doc) }}">Intro</a>
+  </li>
+</ul>
+
+{{ toctree(maxdepth=4, collapse=theme_collapse_navigation, includehidden=True) }}
+
+<ul class="parent">
+  <li>
+    <a href="{{ pathto('swift-modindex.html', 1) }}">Index</a>
+  </li>
+</ul>

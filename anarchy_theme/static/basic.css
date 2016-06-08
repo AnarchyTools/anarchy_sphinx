@@ -1,0 +1,408 @@
+/*
+ * basic.css
+ * ~~~~~~~~~
+ *
+ * Sphinx stylesheet -- anarchytools theme.
+ *
+ * :copyright: Copyright 2016 by Johannes Schriewer.
+ * :license: BSD, see LICENSE for details.
+ *
+ */
+
+/* -- body ----- */
+
+@import url(https://fonts.googleapis.com/css?family=Fira+Mono:400,700|Fira+Sans:300,300italic,500,500italic|Ubuntu+Condensed);
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Fira Sans';
+    font-weight: 300;
+    line-height: 1.4;
+    overflow-x: hidden;
+    overflow-y: scroll;
+    font-size: 14px;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-family: 'Ubuntu Condensed', Helvetica, Arial, sans-serif;
+}
+
+code, pre {
+    font-family: 'Fira Mono', Consolas, Monaco, 'Courier New';
+}
+
+.main_content {
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: center;
+}
+
+.main_content main {
+    padding: 20px;
+    max-width: 750px;
+    min-width: 450px;
+    width: 60%;
+}
+
+.main_content > aside {
+    width: 250px;
+    padding: 20px;
+    overflow-y: auto;
+}
+
+footer {
+    border-top: 1px solid #e0e0e0;
+    color: #808080;
+    padding-top: 10px;
+    font-size: 80%;
+    text-align: center;
+}
+
+/* nav */
+
+aside {
+    font-size: 90%;
+}
+
+aside section {
+    border-left: 1px solid #e0e0e0;
+    margin-bottom: 10px;
+    margin: 0 0 10px -20px;
+    padding: 0 0 10px 20px;
+}
+
+aside h3 {
+    margin: -5px 0 0 0;
+    padding: 0;
+}
+
+aside section ul {
+    list-style-type: none;
+    padding: 0 0 0 20px;
+    margin-bottom: 20px;
+}
+
+aside section > ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+aside section ul > li.current > a {
+    padding: 0 .25rem;
+    margin: 0 -.25rem;
+    border: 1px solid #E1E1E1;
+    border-radius: 4px;
+}
+
+nav {
+    width: 100%;
+    font-size: 90%;
+}
+
+nav h3 {
+    display: none;
+}
+
+nav ul {
+    margin: 0;
+    padding: 0;
+}
+
+nav ul.parent {
+    float: left;
+}
+
+nav ul.rel {
+    float: right;
+}
+
+nav li {
+    display: inline-block;
+    text-transform: capitalize;
+}
+
+/* generic */
+
+a, a:visited {
+    color: #081CBF;
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+/* page content */
+
+.align-left {
+    float: left;
+    margin: 10px 20px 10px 0;
+}
+
+.align-right {
+    float: left;
+    margin: 10px 0 10px 20px;
+}
+
+a.headerlink {
+    opacity: 0;
+    transition: opacity 0.2s ease-in;
+}
+
+.section h1:hover a.headerlink {
+    opacity: 1;
+}
+
+code {
+    padding: 0 .25rem;
+    margin: 0 .2rem;
+    font-size: 90%;
+    white-space: nowrap;
+    background: #F8F8F8;
+    border: 1px solid #E1E1E1;
+    border-radius: 4px;
+}
+
+code.xref {
+    background: transparent;
+    border: none;
+}
+
+div > .highlight {
+    padding: .4rem .5rem .2rem .5rem;
+    margin: 0 .2rem;
+    font-size: 90%;
+    background: #F8F8F8;
+    border: 1px solid #E1E1E1;
+    border-radius: 4px;
+    border-left: 4px solid #E1E1E1;
+}
+
+.highlight-swift > div {
+    border-left: 4px solid #f25c22;
+}
+
+.highlight-clojure > div {
+    border-left: 4px solid #081CBF;
+}
+
+/* autodoc */
+
+dl.extension > dt,
+dl.protocol > dt,
+dl.class > dt,
+dl.struct > dt,
+dl.enum > dt {
+    padding: 2px 0 0 10px;
+    background: #F8F8F8;
+    border: 1px solid #E1E1E1;
+    border-radius: 4px;
+    border-left: 4px solid #f25c22;
+}
+
+dl > dt code {
+    font-size: 100%;
+    margin: 0;
+}
+
+dl > dt code + code {
+    margin-left: 0.5em;
+}
+
+dd > table {
+    margin-top: 20px;
+}
+
+dl.extension dd dl,
+dl.protocol dd dl,
+dl.class dd dl,
+dl.struct dd dl,
+dl.enum dd dl {
+    padding: 2px 0 0 10px;
+
+    background: #FDFDFD;
+    border: 1px solid #E1E1E1;
+    border-radius: 4px;
+}
+
+code.descclassname, code.descname {
+    font-weight: 800;
+    padding: 0;
+    background: none;
+    border: none;
+}
+
+code.descname {
+    padding-right: 2px;
+}
+
+.property:before {
+    content: " ";
+}
+
+table.field-list {
+    margin-bottom: 5px;
+}
+
+table.field-list th {
+    text-align: left;
+    padding: 0 10px 0 0;
+    vertical-align: top;
+}
+
+table.field-list td {
+    padding: 0;
+    vertical-align: top;
+}
+
+td.field-body ul,
+td.field-body p {
+    margin: 0;
+}
+
+td.field-body ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+td.field-body ul li strong {
+    font-style: italic;
+}
+
+.section {
+    padding-top: 10px;
+}
+
+/* index */
+
+ul.index {
+    list-style-type: none;
+    padding: 0;
+}
+
+ul.index > li span {
+    display: block;
+    padding: 2px 0 0 10px;
+    background: #FDFDFD;
+    border: 1px solid #E1E1E1;
+    border-radius: 4px;
+    border-left: 4px solid #f25c22;
+    margin: 20px 0;
+}
+
+ul.index ul {
+    list-style-type: none;
+    padding: 0 0 0 20px;
+}
+
+ul.index ul li code {
+    border: none;
+    background: transparent;
+    margin-right: 0;
+}
+
+ul.index ul li em {
+    font-size: 80%;
+}
+
+/* admonition */
+
+.admonition {
+    background: #FDFDFD;
+    border-radius: 4px;
+    margin-bottom: 20px;
+}
+
+.admonition p {
+    margin: 0;
+    padding: 3px 5px;
+}
+
+.admonition-title {
+    background: #F8F8F8;
+    font-weight: 500;
+}
+
+.admonition.note {
+    border: 2px solid #E1E1E1;
+}
+
+.admonition.note p, .admonition.warning p {
+    padding-left: 25px;
+}
+
+.admonition.note .admonition-title:before {
+    content: " ⓘ ";
+    display: inline-block;
+    width: 20px;
+    margin-left: -20px;
+    font-weight: 500;
+}
+
+.admonition.warning {
+    border: 2px solid #f25c22;
+}
+
+.admonition.warning .admonition-title {
+    color: #f25c22;
+    background: rgba(242,92,34,0.1)
+}
+
+.admonition.warning .admonition-title:before {
+    content: " ⚠ ";
+    display: inline-block;
+    width: 20px;
+    margin-left: -20px;
+    font-weight: 500;
+    color: #f25c22;
+}
+
+.deprecated p, .versionadded p, .versionchanged p {
+    margin: 0;
+}
+
+.deprecated, .versionadded, .versionchanged {
+    margin: 0;
+    padding: 3px 5px;
+    border-radius: 4px;
+    margin-bottom: 20px;
+}
+
+.deprecated {
+    border: 2px solid #081CBF;
+    background: rgba(8,28,191,0.1)
+}
+
+.deprecated .versionmodified:before {
+    content: " ⤾ ";
+    display: inline-block;
+    width: 20px;
+    font-weight: 500;
+    color: #081CBF;
+}
+
+.versionadded, .versionchanged {
+    border: 2px solid #E1E1E1;
+    background: #FDFDFD;
+}
+
+.versionadded .versionmodified:before {
+    content: " + ";
+    display: inline-block;
+    width: 15px;
+    padding-left: 5px;
+    font-weight: 500;
+    color: #000;
+}
+
+.versionchanged .versionmodified:before {
+    content: " ✎ ";
+    display: inline-block;
+    width: 17px;
+    padding-left: 3px;
+    font-weight: 500;
+    color: #000;
+}

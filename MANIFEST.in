@@ -1,0 +1,6 @@
+include *.txt
+include LICENSE
+recursive-include anarchy_theme *.conf
+recursive-include anarchy_theme *.css
+recursive-include anarchy_theme *.html
+recursive-include anarchy_theme *.js
