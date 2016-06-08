@@ -35,7 +35,7 @@ todo_include_todos = False
 
 
 # -- Options for HTML output ----------------------------------------------
-
+import anarchy_theme
 html_theme = 'anarchyTheme'
 
 # Theme options are theme-specific and customize the look and feel of a theme
