@@ -1,0 +1,18 @@
+{
+	"folders":
+	[
+		{
+			"path": ".",
+			"folder_exclude_patterns": [ "dist", "build", "*.egg-info", "__pycache__" ],
+			"file_exclude_patterns": [ ".gitignore", "LICENSE" ]
+		},
+	],
+    "build_systems":
+    [
+        {
+            "name": "sdist",
+            "cmd": ["python", "setup.py", "sdist" ],
+            "selector": "source.python"
+        }
+    ]
+}
