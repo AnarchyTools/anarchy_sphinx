@@ -324,7 +324,7 @@ class SwiftObjectIndex(object):
 
         if not nodocstring:
             for line in doc_block_to_rst(item['docstring']):
-                yield indent + line
+                yield indent + ' ' + line
             yield ''
 
         if location:
