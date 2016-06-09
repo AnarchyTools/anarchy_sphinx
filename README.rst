@@ -105,6 +105,7 @@ all of those have a ``:noindex:`` parameter to keep it out of the index.
 ===================================
 
 .. code::
+
     usage: anarchysphinx [-h] [--private] [--overwrite] [--undoc-members]
                          [--no-members] [--file-location] [--no-index]
                          [--no-index-members] [--exclude-list file]
