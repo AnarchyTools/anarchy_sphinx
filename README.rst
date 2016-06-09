@@ -41,6 +41,14 @@ conf.py file:
     html_theme = "anarchy_theme"
     html_theme_path = ["_themes", ]
 
+Changelog
+=========
+
+0.2.0:
+------
+
+- Add ``anarchysphinx`` command line tool to bootstrap documentation
+
 
 Swift auto documentation extractor
 ==================================
@@ -91,3 +99,36 @@ document you can skip the corresponding Swift keyword (Example: ``.. swift:class
 - ``.. swift:static_var::`` static variables
 
 all of those have a ``:noindex:`` parameter to keep it out of the index.
+
+
+``anarchysphinx`` command line tool
+===================================
+
+.. code::
+    usage: anarchysphinx [-h] [--private] [--overwrite] [--undoc-members]
+                         [--no-members] [--file-location] [--no-index]
+                         [--no-index-members] [--exclude-list file]
+                         [--use-autodocumenter]
+                         source_path documentation_path
+
+    Bootstrap ReStructured Text documentation for Swift code.
+
+    positional arguments:
+      source_path           Path to Swift files
+      documentation_path    Path to generate the documentation in
+
+    optional arguments:
+      -h, --help            show this help message and exit
+      --private             Include private and internal members
+      --overwrite           Overwrite existing documentation
+      --undoc-members       Include members without documentation block
+      --no-members          Do not include member documentation
+      --file-location       Add a paragraph with file location where the member
+                            was defined
+      --no-index            Do not add anything to the index
+      --no-index-members    Do not add members to the index, just the toplevel
+                            items
+      --exclude-list file   File with exclusion list for members
+      --use-autodocumenter  Do not dump actual documentation but rely on the auto
+                            documenter, may duplicate documentation in case you
+                            have defined extensions in multiple files
