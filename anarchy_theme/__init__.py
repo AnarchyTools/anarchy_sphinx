@@ -1,6 +1,6 @@
 import os
 
-VERSION = (0, 2, 0)
+VERSION = (0, 2, 1)
 
 __version__ = ".".join(str(v) for v in VERSION)
 __version_full__ = __version__
