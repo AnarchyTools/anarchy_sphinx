@@ -17,27 +17,37 @@ Download the package or add it to your ``requirements.txt`` file:
 
 .. code:: bash
 
-    $ pip install anarchy_sphinx
+    $ pip install anarchy-sphinx
 
 In your ``conf.py`` file:
 
 .. code:: python
 
+    # documentation extractor and swift specific commands
+    extensions = ["swift_domain"]
+    
+    # anarchy theme
     import anarchy_theme
-
     html_theme = "anarchy_theme"
-
     html_theme_path = [anarchy_theme.get_html_theme_path()]
 
 Via git or download
 -------------------
 
 Symlink or subtree the ``anarchy_sphinx/anarchy_theme`` repository into your documentation at
-``docs/_themes/anarchy_theme`` then add the following two settings to your Sphinx
-conf.py file:
+``docs/_themes/anarchy_theme`` and ``anarchy_sphinx/swift_domain`` to ``docs/_extensions/swift_domain``
+then add the following two settings to your Sphinx conf.py file:
 
 .. code:: python
 
+    # documentation extractor and swift specific commands
+    import os
+    import sys
+    sys.path.insert(0, os.path.abspath('_extensions'))
+    
+    extensions = ["swift_domain"]
+    
+    # anarchy theme
     html_theme = "anarchy_theme"
     html_theme_path = ["_themes", ]
 
