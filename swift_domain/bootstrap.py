@@ -1,7 +1,7 @@
 import argparse
 import os
 
-from swift_domain.indexer import SwiftFileIndex, SwiftObjectIndex, pprint
+from swift_domain.indexer import SwiftFileIndex, SwiftObjectIndex
 
 parser = argparse.ArgumentParser(description='Bootstrap ReStructured Text documentation for Swift code.')
 parser.add_argument(
@@ -83,10 +83,12 @@ parser.add_argument(
     '--use-autodocumenter',
     dest='autodocumenter',
     action='store_true',
-    help='Do not dump actual documentation but rely on the auto documenter, may duplicate documentation in case you have defined extensions in multiple files',
+    help='''Do not dump actual documentation but rely on the auto documenter,
+    may duplicate documentation in case you have defined extensions in multiple files''',
     required=False,
     default=False
 )
+
 
 def main():
     args = parser.parse_args()
@@ -95,14 +97,15 @@ def main():
 
     try:
         os.makedirs(args.documentation_path)
-    except FileExistsError:
+    except os.FileExistsError:
         pass
 
     # check for overwrite
     for file, members in file_index.by_file().items():
         destfile = get_dest_file(file, args.source_path, args.documentation_path)
         if os.path.exists(destfile) and not args.overwrite:
-            print("ERROR: {} already exists, to overwrite existing documentation use the '--overwrite' flag".format(file))
+            print("""ERROR: {} already exists, to overwrite existing
+                     documentation use the '--overwrite' flag""".format(file))
             exit(1)
 
     exclusion_list = []
@@ -114,13 +117,13 @@ def main():
         print("Writing documentation for '{}'...".format(os.path.relpath(file, source_path)))
         try:
             os.makedirs(os.path.dirname(destfile))
-        except FileExistsError:
+        except os.FileExistsError:
             pass
         with open(destfile, "w") as fp:
             heading = 'Documentation for {}'.format(os.path.relpath(file, source_path))
-            fp.write(('=' * len(heading))+ '\n')
+            fp.write(('=' * len(heading)) + '\n')
             fp.write(heading + '\n')
-            fp.write(('=' * len(heading))+ '\n\n\n')
+            fp.write(('=' * len(heading)) + '\n\n\n')
             if args.autodocumenter:
                 auto_document(members, args, exclusion_list, fp)
             else:
@@ -137,9 +140,9 @@ def auto_document(members, args, exclusion_list, fp):
         add = True
         if member['name'] in exclusion_list:
             add = False
-        if args.undoc == False and len(member['docstring']) == 0:
+        if args.undoc is False and len(member['docstring']) == 0:
             add = False
-        if args.private == False and member['scope'] != 'public':
+        if args.private is False and member['scope'] != 'public':
             add = False
         if not add:
             continue
@@ -164,9 +167,9 @@ def document(members, args, exclusion_list, file, fp, indent):
         add = True
         if member['name'] in exclusion_list:
             add = False
-        if args.undoc == False and len(member['docstring']) == 0:
+        if args.undoc is False and len(member['docstring']) == 0:
             add = False
-        if args.private == False and member['scope'] != 'public':
+        if args.private is False and member['scope'] != 'public':
             add = False
         if not add:
             continue
@@ -192,9 +195,9 @@ def document_member(parent, args, exclusion_list, file, fp, indent):
         add = True
         if member['name'] in exclusion_list:
             add = False
-        if args.undoc == False and len(member['docstring']) == 0:
+        if args.undoc is False and len(member['docstring']) == 0:
             add = False
-        if args.private == False and member['scope'] != 'public':
+        if args.private is False and member['scope'] != 'public':
             add = False
         if not add:
             continue

@@ -1,6 +1,7 @@
 import re
 import fnmatch
 import os
+from pprint import PrettyPrinter
 
 # member patterns
 func_pattern      = re.compile(r'\s*(final\s+)?(?P<scope>private\s+|public\s+|internal\s+)?(final\s+)?(?P<static>class\s|static\s+|mutating\s+)?(?P<type>func)\s+(?P<name>[a-zA-Z_][a-zA-Z0-9_]*\b)(?P<rest>[^{]*)')
@@ -15,26 +16,32 @@ return_pattern  = re.compile(r'^\s*- [rR]eturn[s]?\s*:\s*(?P<desc>.*)')
 throws_pattern  = re.compile(r'^\s*- [tT]hrow[s]?\s*:\s*(?P<desc>.*)')
 default_pattern = re.compile(r'^\s*- [dD]efault[s]?\s*:\s*(?P<desc>.*)')
 
+
 # signatures
 def class_sig(name=r'[a-zA-Z_][a-zA-Z0-9_]*'):
     return re.compile(r'\s*(final\s+)?(?P<scope>private\s+|public\s+|internal\s+)?(final\s+)?(?P<struct>class)\s+(?!func)(?P<name>' + name + r'\b)(\s*:\s*(?P<type>[^{]*))*')
 
+
 def enum_sig(name=r'[a-zA-Z_][a-zA-Z0-9_]*'):
     return re.compile(r'\s*(final\s+)?(?P<scope>private\s+|public\s+|internal\s+)?(final\s+)?(?P<struct>enum)\s+(?P<name>' + name + r'\b)(\s*:\s*(?P<type>[^{]*))*')
+
 
 def struct_sig(name=r'[a-zA-Z_][a-zA-Z0-9_]*'):
     return re.compile(r'\s*(final\s+)?(?P<scope>private\s+|public\s+|internal\s+)?(final\s+)?(?P<struct>struct)\s+(?P<name>' + name + r'\b)(\s*:\s*(?P<type>[^{]*))*')
 
+
 def protocol_sig(name=r'[a-zA-Z_][a-zA-Z0-9_]*'):
     return re.compile(r'\s*(?P<scope>private\s+|public\s+|internal\s+)?(?P<struct>protocol)\s+(?P<name>' + name + r'\b)(\s*:\s*(?P<type>[^{]*))*')
+
 
 def extension_sig(name=r'[a-zA-Z_][a-zA-Z0-9_]*'):
     return re.compile(r'\s*(?P<scope>private\s+|public\s+|internal\s+)?(?P<struct>extension)\s+(?P<name>' + name + r'\b)(\s*:\s*(?P<type>[^{]*))*(\s*where\s+(?P<where>[^{]*))?')
 
 
 # debug printer
-from pprint import PrettyPrinter
 pp = PrettyPrinter(indent=1)
+
+
 def pprint(*args):
     pp.pprint(*args)
 
@@ -42,6 +49,8 @@ def pprint(*args):
 string_pattern = re.compile(r'"(?:[^"\\]*(?:\\.)?)*"')
 line_comment_pattern = re.compile(r'(// .*$)')
 comment_pattern = re.compile(r'/\*(?:.)*\*/')
+
+
 def balance_braces(line, brace_count):
     line = string_pattern.sub("", line)
     line = comment_pattern.sub("", line)
@@ -50,6 +59,7 @@ def balance_braces(line, brace_count):
     close_braces = line.count('}')
     braces = brace_count + open_braces - close_braces
     return braces
+
 
 # fetch documentation block
 def get_doc_block(content, line):
@@ -65,10 +75,11 @@ def get_doc_block(content, line):
         break
     return doc_block
 
+
 def doc_block_to_rst(doc_block):
     def emit_item(item):
         if item[0] == 'param':
-            return ':parameter '+ item[1] +': ' + item[2]
+            return ':parameter ' + item[1] + ': ' + item[2]
         elif item[0] == 'return':
             return ':returns: ' + item[1]
         elif item[0] == 'throws':
@@ -132,7 +143,6 @@ class SwiftFileIndex(object):
             for root, dirnames, filenames in os.walk(path):
                 for filename in fnmatch.filter(filenames, '*.swift'):
                     self.files.append(os.path.join(root, filename))
-
 
         for file in self.files:
             print("Indexing swift file: %s" % file)
@@ -330,4 +340,3 @@ class SwiftObjectIndex(object):
         if location:
             yield indent + 'Defined in :doc:`' + location + '`:' + str(item['line'])
             yield ''
-

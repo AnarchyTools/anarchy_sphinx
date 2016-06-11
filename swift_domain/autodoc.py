@@ -2,6 +2,8 @@ from sphinx.ext.autodoc import Documenter, bool_option, members_option, members_
 from swift_domain.indexer import SwiftFileIndex, SwiftObjectIndex
 
 file_index = None
+
+
 def build_index(app):
     global file_index
     file_index = SwiftFileIndex(app.config.swift_search_path)
@@ -27,7 +29,6 @@ class SwiftAutoDocumenter(Documenter):
 
     def generate(self, **kwargs):
         global file_index
-        all_members = kwargs.get('all_members', False)
 
         emit_warning = True
         for index in file_index.find(self.name):

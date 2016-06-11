@@ -16,18 +16,17 @@ from docutils.parsers.rst import directives
 
 from sphinx import addnodes
 from sphinx.roles import XRefRole
-from sphinx.locale import l_, _
+from sphinx.locale import l_
 from sphinx.domains import Domain, ObjType, Index
 from sphinx.directives import ObjectDescription
 from sphinx.util.nodes import make_refnode
-from sphinx.util.compat import Directive
 from sphinx.util.docfields import Field, GroupedField, TypedField
 
-from sphinx.ext.autodoc import Documenter, bool_option
 
 def _iteritems(d):
     for k in d:
         yield k, d[k]
+
 
 class SwiftObjectDescription(ObjectDescription):
     option_spec = {
@@ -156,7 +155,7 @@ class SwiftClassmember(SwiftObjectDescription):
 
     def _parse_parameter_list(self, parameter_list):
         parameters = []
-        parens = { '[]': 0, '()': 0, '<>': 0 }
+        parens = {'[]': 0, '()': 0, '<>': 0}
         last_split = 0
         for i, c in enumerate(parameter_list):
             for key, value in parens.items():
@@ -180,7 +179,7 @@ class SwiftClassmember(SwiftObjectDescription):
         result = []
         for parameter in parameters:
             name, rest = [x.strip() for x in parameter.split(':', maxsplit=1)]
-            name_parts = name.split(' ', maxsplit = 1)
+            name_parts = name.split(' ', maxsplit=1)
             if len(name_parts) > 1:
                 name = name_parts[0]
                 variable_name = name_parts[1]
@@ -218,7 +217,6 @@ class SwiftClassmember(SwiftObjectDescription):
         # find method specialization
         angle_bracket = method_name.find('<')
         if angle_bracket >= 0:
-            method_specialization = method_name[angle_bracket + 1: -1]
             method_name = method_name[:angle_bracket]
 
         rest = sig[split_point:]
@@ -340,11 +338,12 @@ class SwiftEnumCase(SwiftObjectDescription):
             signode += addnodes.desc_addname(raw_value, " = " + raw_value)
 
         if container_class_name:
-            enum_case =  container_class_name + '.' + enum_case
+            enum_case = container_class_name + '.' + enum_case
         return enum_case, enum_case, True
 
 
 var_sig = re.compile(r'^\s*(?P<name>[a-zA-Z_][a-zA-Z0-9_]*\b)(\s*:\s*(?P<type>[a-zA-Z_[(][a-zA-Z0-9_<>[\]()?!:, \t-]*))?(\s*=\s*(?P<value>[^{]*))?')
+
 
 class SwiftClassIvar(SwiftObjectDescription):
 
@@ -355,7 +354,6 @@ class SwiftClassIvar(SwiftObjectDescription):
 
     def handle_signature(self, sig, signode):
         container_class_name = self.env.temp_data.get('swift:class')
-        container_class_type = self.env.temp_data.get('swift:class_type')
 
         match = var_sig.match(sig)
         if not match:
@@ -392,7 +390,7 @@ class SwiftClassIvar(SwiftObjectDescription):
         signature += "-" + self.objtype
 
         if container_class_name:
-            name =  container_class_name + '.' + name
+            name = container_class_name + '.' + name
             signature = container_class_name + '.' + signature
         return name, signature, True
 
@@ -401,6 +399,7 @@ class SwiftXRefRole(XRefRole):
 
     def process_link(self, env, refnode, has_explicit_title, title, target):
         return title, target
+
 
 class SwiftModuleIndex(Index):
     """
@@ -456,6 +455,7 @@ class SwiftModuleIndex(Index):
 
         return result, collapse
 
+
 class SwiftDomain(Domain):
     """Swift language domain."""
     name = 'swift'
@@ -499,22 +499,22 @@ class SwiftDomain(Domain):
     }
 
     roles = {
-        'function':     SwiftXRefRole(),
-        'method':       SwiftXRefRole(),
-        'class':        SwiftXRefRole(),
-        'enum':         SwiftXRefRole(),
-        'enum_case':    SwiftXRefRole(),
-        'struct':       SwiftXRefRole(),
-        'init':         SwiftXRefRole(),
-        'static_method':SwiftXRefRole(),
-        'class_method': SwiftXRefRole(),
-        'protocol':     SwiftXRefRole(),
-        'extension':    SwiftXRefRole(),
-        'default_impl': SwiftXRefRole(),
-        'let':          SwiftXRefRole(),
-        'var':          SwiftXRefRole(),
-        'static_let':   SwiftXRefRole(),
-        'static_var':   SwiftXRefRole()
+        'function':      SwiftXRefRole(),
+        'method':        SwiftXRefRole(),
+        'class':         SwiftXRefRole(),
+        'enum':          SwiftXRefRole(),
+        'enum_case':     SwiftXRefRole(),
+        'struct':        SwiftXRefRole(),
+        'init':          SwiftXRefRole(),
+        'static_method': SwiftXRefRole(),
+        'class_method':  SwiftXRefRole(),
+        'protocol':      SwiftXRefRole(),
+        'extension':     SwiftXRefRole(),
+        'default_impl':  SwiftXRefRole(),
+        'let':           SwiftXRefRole(),
+        'var':           SwiftXRefRole(),
+        'static_let':    SwiftXRefRole(),
+        'static_var':    SwiftXRefRole()
     }
     initial_data = {
         'objects': {},  # fullname -> docname, objtype
@@ -539,6 +539,7 @@ class SwiftDomain(Domain):
     def get_objects(self):
         for refname, (docname, type, signature) in _iteritems(self.data['objects']):
             yield (refname, refname, type, docname, refname, 1)
+
 
 def setup(app):
     from .autodoc import SwiftAutoDocumenter, build_index
