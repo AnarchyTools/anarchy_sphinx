@@ -309,6 +309,47 @@ ul.index ul li em {
     font-size: 80%;
 }
 
+/* tables */
+
+table {
+    border: 1px solid #E1E1E1;
+    border-collapse: collapse;
+}
+
+thead tr {
+    background-color: #F8F8F8;
+}
+
+thead tr th {
+    font-family: 'Ubuntu Condensed', Helvetica, Arial, sans-serif;
+    font-weight: 600;
+    text-align: left;
+    padding: 3px 5px;
+    border: none;
+    border-bottom: 1px solid #E1E1E1;
+}
+
+tr {
+    border: none;
+}
+
+tr.row-even {
+    background-color: #ffffff;
+}
+
+tr.row-odd {
+    background-color: #FAFAFA;
+}
+
+tr:hover {
+    background-color: #E1E1E1;
+}
+
+td {
+    border: none;
+    padding: 5px;
+}
+
 /* admonition */
 
 .admonition {
