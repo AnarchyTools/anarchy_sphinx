@@ -19,6 +19,10 @@
 
 <ul class="parent">
   <li>
+    {%- if hasdoc('swift-modindex') %}
     <a href="{{ pathto('swift-modindex.html', 1) }}">Index</a>
+    {%- else %}
+    <a href="{{ pathto('genindex.html', 1) }}">Index</a>    
+    {%- endif %}
   </li>
 </ul>
