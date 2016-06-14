@@ -91,10 +91,7 @@ aside section > ul {
 }
 
 aside section ul > li.current > a {
-    padding: 0 .25rem;
-    margin: 0 -.25rem;
-    border: 1px solid #E1E1E1;
-    border-radius: 4px;
+    font-weight: 600;
 }
 
 nav {
