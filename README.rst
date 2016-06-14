@@ -25,7 +25,7 @@ In your ``conf.py`` file:
 
     # documentation extractor and swift specific commands
     extensions = ["swift_domain"]
-    
+
     # anarchy theme
     import anarchy_theme
     html_theme = "anarchy_theme"
@@ -44,15 +44,24 @@ then add the following two settings to your Sphinx conf.py file:
     import os
     import sys
     sys.path.insert(0, os.path.abspath('_extensions'))
-    
+
     extensions = ["swift_domain"]
-    
+
     # anarchy theme
     html_theme = "anarchy_theme"
     html_theme_path = ["_themes", ]
 
 Changelog
 =========
+
+0.3.0:
+------
+
+- Fix table rendering in theme
+- Make code boxes that overflow scrollable
+- Switch to bold style for active toc items
+- Bugfix: right aligned images were left aligned
+- Add bullets in front of nav items on top-bar to distinguish them
 
 0.2.0:
 ------
