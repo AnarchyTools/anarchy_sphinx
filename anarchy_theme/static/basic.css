@@ -116,6 +116,10 @@ nav ul.rel {
     float: right;
 }
 
+nav li:before {
+    content: "•";
+}
+
 nav li {
     display: inline-block;
     text-transform: capitalize;
