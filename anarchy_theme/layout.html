@@ -11,7 +11,6 @@
 
 {%- set reldelim1 = reldelim1 is not defined and ' &raquo;' or reldelim1 %}
 {%- set reldelim2 = reldelim2 is not defined and ' |' or reldelim2 %}
-{%- set render_sidebar = (sidebars != []) %}
 {%- set render_parent = (parents != []) %}
 {%- set url_root = pathto('', 1) %}
 {%- if not embedded and docstitle %}
@@ -21,6 +20,7 @@
 {%- endif %}
 
 {%- macro relbar() %}
+{%- if sidebars %}
     <nav>
       <h3>{{ _('Navigation') }}</h3>
       {%- if render_parent %}
@@ -46,10 +46,11 @@
         {%- endfor %}
       </ul>
     </nav>
+{%- endif %}
 {%- endmacro %}
 
 {%- macro sidebar() %}
-      {%- if render_sidebar %}
+      {%- if sidebars %}
       <aside>
         {%- block sidebarlogo %}
         {%- if logo %}
