@@ -169,11 +169,11 @@ In the helptext section::
 
 Below the ``html`` target::
 
-.PHONY: dashdoc
-dashdoc:
-  $(SPHINXBUILD) -b html $(ALLSPHINXOPTS) -D 'html_sidebars.**=""' $(BUILDDIR)/dashdoc
-  doc2dash -v -n $(PROJECT_NAME) -d $(BUILDDIR)/ -f -I index.html -j $(BUILDDIR)/dashdoc
-  @echo
-  @echo "Build finished. The Docset is in $(BUILDDIR)/$(PROJECT_NAME).docset."
+    .PHONY: dashdoc
+    dashdoc:
+        $(SPHINXBUILD) -b html $(ALLSPHINXOPTS) -D 'html_sidebars.**=""' $(BUILDDIR)/dashdoc
+        doc2dash -v -n $(PROJECT_NAME) -d $(BUILDDIR)/ -f -I index.html -j $(BUILDDIR)/dashdoc
+        @echo
+        @echo "Build finished. The Docset is in $(BUILDDIR)/$(PROJECT_NAME).docset."
 
 and run the build with ``make dashdoc``
