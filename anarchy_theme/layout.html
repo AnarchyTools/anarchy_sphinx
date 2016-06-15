@@ -138,7 +138,7 @@
 
 
 <div class="main_content">
-<main>
+<main {%- if sidebars %} class="sidebars"{%- endif %}>
 {%- block relbar %}{{ relbar() }}{% endblock %}
 {%- block content %}
   {%- block sidebar1 %} {# possible location for sidebar #} {% endblock %}

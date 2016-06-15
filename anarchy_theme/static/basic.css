@@ -44,6 +44,10 @@ code, pre {
     padding: 20px;
     max-width: 750px;
     min-width: 450px;
+    width: 90%;
+}
+
+.main_content main.sidebars {
     width: 60%;
 }
 
