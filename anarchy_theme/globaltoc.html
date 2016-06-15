@@ -18,11 +18,9 @@
 {{ toctree(maxdepth=4, collapse=theme_collapse_navigation, includehidden=True) }}
 
 <ul class="parent">
+  {%- for rellink in rellinks %}
   <li>
-    {%- if hasdoc('swift-modindex') %}
-    <a href="{{ pathto('swift-modindex.html', 1) }}">Index</a>
-    {%- else %}
-    <a href="{{ pathto('genindex.html', 1) }}">Index</a>    
-    {%- endif %}
+    <a href="{{ pathto(rellink[0]) }}" title="{{ rellink[1]|striptags|e }}">{{ rellink[3] }}</a>
   </li>
+  {%- endfor %}
 </ul>
