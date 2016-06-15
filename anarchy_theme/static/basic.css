@@ -125,6 +125,10 @@ nav li {
     text-transform: capitalize;
 }
 
+aside ul.parent {
+    text-transform: capitalize;
+}
+
 /* generic */
 
 a, a:visited {
@@ -210,10 +214,6 @@ dl > dt code {
     margin: 0;
 }
 
-dl > dt code + code {
-    margin-left: 0.5em;
-}
-
 dd > table {
     margin-top: 20px;
 }
@@ -248,6 +248,10 @@ code.descname {
 table.field-list {
     margin-bottom: 5px;
     border: none;
+}
+
+table.field-list tr:hover {
+    background: transparent;
 }
 
 table.field-list th {
