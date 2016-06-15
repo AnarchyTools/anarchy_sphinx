@@ -152,3 +152,28 @@ all of those have a ``:noindex:`` parameter to keep it out of the index.
       --use-autodocumenter  Do not dump actual documentation but rely on the auto
                             documenter, may duplicate documentation in case you
                             have defined extensions in multiple files
+
+Generate Dash docsets with sphinx
+=================================
+
+Add the following to your sphinx ``Makefile``. You will need the pip package
+``doc2dash`` installed for this to work.
+
+On top in the variable declaration section::
+
+    PROJECT_NAME=myproject
+
+In the helptext section::
+
+    @echo "  dashdoc    to make Dash docset"
+
+Below the ``html`` target::
+
+.PHONY: dashdoc
+dashdoc:
+  $(SPHINXBUILD) -b html $(ALLSPHINXOPTS) -D 'html_sidebars.**=""' $(BUILDDIR)/dashdoc
+  doc2dash -v -n $(PROJECT_NAME) -d $(BUILDDIR)/ -f -I index.html -j $(BUILDDIR)/dashdoc
+  @echo
+  @echo "Build finished. The Docset is in $(BUILDDIR)/$(PROJECT_NAME).docset."
+
+and run the build with ``make dashdoc``
