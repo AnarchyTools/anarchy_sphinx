@@ -38,8 +38,8 @@ class SwiftObjectDescription(ObjectDescription):
         if 'noindex' in self.options or not add_to_index:
             return
 
-        for char in '<>()[]:, ?!':
-            signature = signature.replace(char, "-")
+        # for char in '<>()[]:, ?!':
+        #     signature = signature.replace(char, "-")
 
         # note target
         if fullname not in self.state.document.ids:
@@ -126,11 +126,15 @@ class SwiftClass(SwiftObjectDescription):
 
         if container_class_name:
             class_name = container_class_name + '.' + class_name
-        return self.objtype + ' ' + class_name, class_name, add_to_index
+        return self.objtype + ' ' + class_name, self.objtype + ' ' + class_name, add_to_index
 
     def before_content(self):
         if self.names:
-            self.env.temp_data['swift:class'] = self.names[0][1]
+            parts = self.names[0][1].split(" ")
+            if len(parts) > 1:
+                self.env.temp_data['swift:class'] = " ".join(parts[1:])
+            else:
+                env.temp_data['swift:class'] = self.names[0][1]
             self.env.temp_data['swift:class_type'] = self.objtype
             self.clsname_set = True
 
@@ -285,19 +289,19 @@ class SwiftClassmember(SwiftObjectDescription):
         title = signature
         if throws:
             signode += addnodes.desc_annotation("throws", "throws")
-            signature += "throws"
+            # signature += "throws"
 
         if return_type:
             signode += addnodes.desc_returns(return_type, return_type)
-            signature += "-" + return_type
+            #signature += "-" + return_type
 
-        if container_class_type == 'protocol':
-            signature += "-protocol"
+        #if container_class_type == 'protocol':
+        #    signature += "-protocol"
 
-        if self.objtype == 'static_method':
-            signature += '-static'
-        elif self.objtype == 'class_method':
-            signature += '-class'
+        #if self.objtype == 'static_method':
+        #    signature += '-static'
+        #elif self.objtype == 'class_method':
+        #    signature += '-class'
 
         if container_class_name:
             return (container_class_name + '.' + title), (container_class_name + '.' + signature), True
@@ -379,7 +383,7 @@ class SwiftClassIvar(SwiftObjectDescription):
         signode += addnodes.desc_name(name, name)
         if match['type']:
             typ = match['type'].strip()
-            signature += '-' + typ
+            #signature += '-' + typ
             signode += addnodes.desc_type(typ, " : " + typ)
         if match['value'] and len(match['value']) > 0:
             value = match['value'].strip()
@@ -387,7 +391,7 @@ class SwiftClassIvar(SwiftObjectDescription):
         elif match['value']:
             signode += addnodes.desc_addname('{ ... }', ' = { ... }')
 
-        signature += "-" + self.objtype
+        #signature += "-" + self.objtype
 
         if container_class_name:
             name = container_class_name + '.' + name
@@ -401,6 +405,8 @@ class SwiftXRefRole(XRefRole):
         return title, target
 
 
+type_order = ['class', 'struct', 'enum', 'protocol', 'extension']
+
 class SwiftModuleIndex(Index):
     """
     Index subclass to provide the Swift module index.
@@ -412,14 +418,25 @@ class SwiftModuleIndex(Index):
 
     @staticmethod
     def indexsorter(a):
-        type_order = ['class', 'struct', 'enum', 'protocol', 'extension']
-
+        global type_order
         for i, t in enumerate(type_order):
             if a[0].startswith(t):
                 return '{:04d}{}'.format(i, a[0])
         return a[0]
 
+    @staticmethod
+    def sigsorter(a):
+        global type_order
+
+        start = 0
+        for t in type_order:
+            if a[3].startswith(t):
+                start = len(t) + 1
+                break
+        return a[3][start]
+
     def generate(self, docnames=None):
+        global type_order
         content = []
         collapse = 0
 
@@ -436,14 +453,20 @@ class SwiftModuleIndex(Index):
                 ''
             ))
 
-        entries = sorted(entries, key=lambda x: x[3][0])
+        entries = sorted(entries, key=self.sigsorter)
         current_list = []
         current_key = None
         for entry in entries:
-            if entry[3][0].upper() != current_key:
+            start = 0
+            for t in type_order:
+                if entry[3].startswith(t):
+                    start = len(t) + 1
+                    break
+
+            if entry[3][start].upper() != current_key:
                 if len(current_list) > 0:
                     content.append((current_key, current_list))
-                current_key = entry[3][0].upper()
+                current_key = entry[3][start].upper()
                 current_list = []
             current_list.append(entry)
         content.append((current_key, current_list))
