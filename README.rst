@@ -54,6 +54,12 @@ then add the following two settings to your Sphinx conf.py file:
 Changelog
 =========
 
+0.3.1:
+------
+
+- Fix layout when no sidebar enabled
+- Experimental: Generate anchors like ``doc2dash`` expects them. Tell me if something breaks!
+
 0.3.0:
 ------
 
