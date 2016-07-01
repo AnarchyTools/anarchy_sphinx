@@ -97,7 +97,7 @@ def main():
 
     try:
         os.makedirs(args.documentation_path)
-    except os.FileExistsError:
+    except FileExistsError:
         pass
 
     # check for overwrite
@@ -117,7 +117,7 @@ def main():
         print("Writing documentation for '{}'...".format(os.path.relpath(file, source_path)))
         try:
             os.makedirs(os.path.dirname(destfile))
-        except os.FileExistsError:
+        except FileExistsError:
             pass
         with open(destfile, "w") as fp:
             heading = 'Documentation for {}'.format(os.path.relpath(file, source_path))
