@@ -289,13 +289,16 @@ class SwiftObjectIndex(object):
                                 scope = 'internal'
                     else:
                         scope = 'public'
+                    docstring = get_doc_block(content, i - 1)
+                    if "- noindex: true" in docstring:
+                        continue
                     self.index.append({
                         'scope': scope,
                         'line': i,
                         'type': match['type'].strip(),
                         'name': match['name'].strip() if match['type'] != 'init' and match['type'] != 'init?' else 'init',
                         'static': match['static'].strip() if 'static' in match and match['static'] else None,
-                        'docstring': get_doc_block(content, i - 1),
+                        'docstring': docstring,
                         'rest': match['rest'].strip() if 'rest' in match and match['rest'] else None,
                         'assoc_type': match['assoc_type'].strip() if 'assoc_type' in match and match['assoc_type'] else None,
                         'raw_value': match['raw_value'].strip() if 'raw_value' in match and match['raw_value'] else None,
