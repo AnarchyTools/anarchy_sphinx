@@ -20,7 +20,8 @@ class SwiftAutoDocumenter(Documenter):
         'nodocstring': bool_option,             # do not show the docstring
         'file-location': bool_option,           # add a paragraph with the file location
         'exclude-members': members_set_option,  # exclude these members
-        'private-members': bool_option          # show private members
+        'private-members': bool_option,         # show private members
+        'only-with-members': members_set_option  # only document if it contains the member 
     }
 
     def __init__(self, *args, **kwargs):
@@ -47,6 +48,11 @@ class SwiftAutoDocumenter(Documenter):
                 err)
 
     def document(self, item, indent=''):
+        member_list = self.options.members if isinstance(self.options.members, list) else None
+
+        if self.options.only_with_members:
+            if len(list(filter(lambda x: x['name'] in self.options.only_with_members, item['members'].index))) <= 0:
+                return
 
         doc = SwiftFileIndex.documentation(
             item,
@@ -63,7 +69,6 @@ class SwiftAutoDocumenter(Documenter):
         if 'members' not in self.options:
             return
 
-        member_list = self.options.members if isinstance(self.options.members, list) else None
         exclude_list = self.options.exclude_members if isinstance(self.options.exclude_members, list) else []
         for member in item['members'].index:
             add = False
