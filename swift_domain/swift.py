@@ -563,12 +563,16 @@ class SwiftDomain(Domain):
         for refname, (docname, type, signature) in _iteritems(self.data['objects']):
             yield (refname, refname, type, docname, refname, 1)
 
+def make_index(app,*args):
+    from .autodoc import build_index
+    build_index(app)
 
 def setup(app):
     from .autodoc import SwiftAutoDocumenter, build_index
+    app.connect('builder-inited', make_index)
+
     app.add_autodocumenter(SwiftAutoDocumenter)
 
     app.add_domain(SwiftDomain)
     app.add_config_value('swift_search_path', ['../src'], 'env')
     app.add_config_value('autodoc_default_flags', [], True)
-    build_index(app)
