@@ -2,6 +2,8 @@ import re
 import fnmatch
 import os
 from pprint import PrettyPrinter
+from fuzzywuzzy import process
+
 
 # member patterns
 func_pattern      = re.compile(r'\s*(final\s+)?(?P<scope>private\s+|public\s+|internal\s+)?(final\s+)?(?P<static>class\s|static\s+|mutating\s+)?(?P<type>func)\s+(?P<name>[a-zA-Z_][a-zA-Z0-9_]*\b)(?P<rest>[^{]*)')
@@ -231,12 +233,32 @@ class SwiftFileIndex(object):
             return args
 
         for item in index:
-            item_name = '.'.join([unpack(name_prefix), item['name']])
+            item_name = ".".join(name_prefix + [item['name']])
             if name == item_name:
                 yield item
             if len(item['children']) > 0:
                 for result in self.find(name, index=item['children'], name_prefix=[unpack(name_prefix), item['name']]):
                     yield result
+
+    def __names(self,index,name_prefix):
+        """Return all names the receiver could find."""
+        def unpack(*args):
+            return args
+        for item in index:
+            yield ".".join(name_prefix + [item['name']])
+            for child in item['children']:
+                for name in child.__names(item['children'],name_prefix=[unpack(name_prefix),item['name']]):
+                    yield name
+
+                
+
+    def find_fuzz(self,name,index=None,name_prefix=[]):
+        if not index:
+            index = self.index
+        """Returns the best match with a score like ("Foo",90)"""
+        return process.extractOne(name,self.__names(index,name_prefix))
+
+
 
     def by_file(self, index=None):
         result = {}

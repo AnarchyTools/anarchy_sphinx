@@ -36,9 +36,15 @@ class SwiftAutoDocumenter(Documenter):
             emit_warning = False
 
         if emit_warning:
+            #find best match
+            best = file_index.find_fuzz(self.name)
+            if best:
+                err = 'can not find "%s" in any Swift file.  Did you mean "%s"?' % (self.name,best[0])
+            else:
+                err = 'can not find "%s" in any Swift file.  No Swift symbols were indexed.' % self.name
             self.env.warn(
                 self.env.docname,
-                'can not find "%s" in any Swift file!' % self.name)
+                err)
 
     def document(self, item, indent=''):
 
