@@ -213,9 +213,18 @@ class SwiftClassmember(SwiftObjectDescription):
         first_anglebracket = sig.find('<')
         first_paren = sig.find('(')
         if first_anglebracket >= 0 and first_paren > first_anglebracket:
-            split_point = sig.find('>')
+            split_point = sig.find('>')+1
         else:
             split_point = first_paren
+
+        # calculate generics
+        if first_anglebracket >= 0:
+            sp = sig[first_anglebracket:]
+            np = sp.find('>')
+            generics = sp[:np+1]
+        else:
+            generics = None
+
         method_name = sig[0:split_point]
 
         # find method specialization
@@ -274,6 +283,9 @@ class SwiftClassmember(SwiftObjectDescription):
             for p in parameters:
                 signature += p['name'] + ':'
             signature += ')'
+
+        if generics:
+            signode += addnodes.desc_addname(generics,generics)
 
         params = []
         sig = ''
