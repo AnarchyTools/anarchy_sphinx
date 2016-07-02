@@ -396,13 +396,18 @@ class SwiftClassIvar(SwiftObjectDescription):
         if container_class_name:
             name = container_class_name + '.' + name
             signature = container_class_name + '.' + signature
+
         return name, signature, True
 
 
 class SwiftXRefRole(XRefRole):
 
+    def __init__(self,tipe):
+        super().__init__()
+        self.tipe = tipe
+
     def process_link(self, env, refnode, has_explicit_title, title, target):
-        return title, target
+        return title, self.tipe+" "+target
 
 
 type_order = ['class', 'struct', 'enum', 'protocol', 'extension']
@@ -522,22 +527,22 @@ class SwiftDomain(Domain):
     }
 
     roles = {
-        'function':      SwiftXRefRole(),
-        'method':        SwiftXRefRole(),
-        'class':         SwiftXRefRole(),
-        'enum':          SwiftXRefRole(),
-        'enum_case':     SwiftXRefRole(),
-        'struct':        SwiftXRefRole(),
-        'init':          SwiftXRefRole(),
-        'static_method': SwiftXRefRole(),
-        'class_method':  SwiftXRefRole(),
-        'protocol':      SwiftXRefRole(),
-        'extension':     SwiftXRefRole(),
-        'default_impl':  SwiftXRefRole(),
-        'let':           SwiftXRefRole(),
-        'var':           SwiftXRefRole(),
-        'static_let':    SwiftXRefRole(),
-        'static_var':    SwiftXRefRole()
+        'function':      SwiftXRefRole("function"),
+        'method':        SwiftXRefRole("method"),
+        'class':         SwiftXRefRole("class"),
+        'enum':          SwiftXRefRole("enum"),
+        'enum_case':     SwiftXRefRole("enum_case"),
+        'struct':        SwiftXRefRole("struct"),
+        'init':          SwiftXRefRole("init"),
+        'static_method': SwiftXRefRole("static_method"),
+        'class_method':  SwiftXRefRole("class_method"),
+        'protocol':      SwiftXRefRole("protocol"),
+        'extension':     SwiftXRefRole("extension"),
+        'default_impl':  SwiftXRefRole("default_impl"),
+        'let':           SwiftXRefRole("let"),
+        'var':           SwiftXRefRole("var"),
+        'static_let':    SwiftXRefRole("static_let"),
+        'static_var':    SwiftXRefRole("static_var")
     }
     initial_data = {
         'objects': {},  # fullname -> docname, objtype
