@@ -88,10 +88,19 @@ def doc_block_to_rst(doc_block):
             return ':defaults: ' + item[1]
 
     last_item = None
+
+    # sphinx requires a newline between documentation and directives
+    # but Swift does not
+    needs_newline = False
+
     for l in doc_block:
         match = param_pattern.match(l)
         if match:
             if last_item:
+                if needs_newline:
+                    print("emitting newline")
+                    needs_newline = False
+                    yield ''
                 yield emit_item(last_item)
             match = match.groupdict()
             last_item = ['param', match['param'], match['desc']]
@@ -99,6 +108,9 @@ def doc_block_to_rst(doc_block):
         match = return_pattern.match(l)
         if match:
             if last_item:
+                if needs_newline:
+                    needs_newline = False
+                    yield ''
                 yield emit_item(last_item)
             match = match.groupdict()
             last_item = ['return', match['desc']]
@@ -106,6 +118,9 @@ def doc_block_to_rst(doc_block):
         match = throws_pattern.match(l)
         if match:
             if last_item:
+                if needs_newline:
+                    needs_newline = False
+                    yield ''
                 yield emit_item(last_item)
             match = match.groupdict()
             last_item = ['throws', match['desc']]
@@ -113,21 +128,30 @@ def doc_block_to_rst(doc_block):
         match = default_pattern.match(l)
         if match:
             if last_item:
+                if needs_newline:
+                    needs_newline = False
+                    yield ''
                 yield emit_item(last_item)
             match = match.groupdict()
             last_item = ['defaults', match['desc']]
             continue
         if last_item and l == '':
+            if needs_newline:
+                    yield ''
             yield emit_item(last_item)
             yield ''
             last_item = None
             continue
         if not last_item:
+            needs_newline = True
             yield l
             continue
         last_item[len(last_item) - 1] += ' ' + l.strip()
 
     if last_item:
+        if needs_newline:
+                    needs_newline = False
+                    yield ''
         yield emit_item(last_item)
 
 
