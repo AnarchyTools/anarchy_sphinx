@@ -1,3 +1,7 @@
+# Copyright 2016 by Johannes Schriewer
+# Copyright 2016 Drew Crawford
+# BSD license, see LICENSE for details
+
 import re
 import fnmatch
 import os

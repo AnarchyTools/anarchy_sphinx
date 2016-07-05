@@ -1,3 +1,6 @@
+# Copyright 2016 by Johannes Schriewer
+# BSD license, see LICENSE for details
+
 from sphinx.ext.autodoc import Documenter, bool_option, members_option, members_set_option
 from swift_domain.indexer import SwiftFileIndex, SwiftObjectIndex
 

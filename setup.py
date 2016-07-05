@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """`anarchytools` lives on `Github`_.
 
-.. _github: https://www.github.com/AnarchyTools/anarchySphinx
+.. _github: https://github.com/AnarchyTools/anarchy_sphinx
 
 """
 from setuptools import setup
