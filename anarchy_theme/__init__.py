@@ -1,3 +1,6 @@
+# Copyright 2016 by Johannes Schriewer
+# BSD license, see LICENSE for details
+
 import os
 
 VERSION = (0, 3, 1)
