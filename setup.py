@@ -44,6 +44,7 @@ setup(
         'Topic :: Software Development :: Documentation',
     ],
     install_requires=[
-        'fuzzywuzzy'
+        'fuzzywuzzy',
+        'sphinx'
     ]
 )
