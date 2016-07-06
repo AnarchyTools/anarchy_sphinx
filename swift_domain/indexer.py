@@ -178,7 +178,8 @@ class SwiftFileIndex(object):
             print("Indexing swift file: %s" % file)
             symbol_stack = []
             braces = 0
-            with open(file, "r") as fp:
+            with open(file, "r",encoding="utf-8") as fp:
+
                 content = fp.readlines()
                 for (index, line) in enumerate(content):
                     braces = balance_braces(line, braces)
