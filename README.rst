@@ -168,6 +168,8 @@ Add the following to your sphinx ``Makefile``. You will need the pip package
 On top in the variable declaration section::
 
     PROJECT_NAME=myproject
+    export LC_ALL=C.UTF-8
+    export LANG=C.UTF-8
 
 In the helptext section::
 
