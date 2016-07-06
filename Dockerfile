@@ -11,4 +11,4 @@ WORKDIR anarchy_sphinx
 RUN python3 setup.py install
 RUN mkdir /docs
 WORKDIR /docs
-ENTRYPOINT ["make","html"]
+CMD ["make","html"]
