@@ -21,7 +21,7 @@ from sphinx.domains import Domain, ObjType, Index
 from sphinx.directives import ObjectDescription
 from sphinx.util.nodes import make_refnode
 from sphinx.util.docfields import Field, GroupedField, TypedField
-
+from .std import SwiftStandardDomain
 
 def _iteritems(d):
     for k in d:
@@ -588,6 +588,7 @@ def setup(app):
     from .autodoc import SwiftAutoDocumenter, build_index
     app.connect('builder-inited', make_index)
 
+    app.override_domain(SwiftStandardDomain)
     app.add_autodocumenter(SwiftAutoDocumenter)
 
     app.add_domain(SwiftDomain)
