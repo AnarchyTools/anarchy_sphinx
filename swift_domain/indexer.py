@@ -74,7 +74,7 @@ def get_doc_block(content, line):
     for i in range(line, 0, -1):
         l = content[i].strip()
         if l.startswith('///'):
-            converted = l[4:].rstrip()
+            converted = l[3:].rstrip()
             converted = converted.replace('`', '``')
             doc_block.insert(0, converted)
             continue
