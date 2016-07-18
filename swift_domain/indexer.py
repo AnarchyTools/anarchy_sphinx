@@ -18,10 +18,40 @@ case_pattern      = re.compile(r'\s*(?P<type>case)\s+(?P<name>[a-zA-Z_][a-zA-Z0-
 
 # markdown doc patterns
 param_pattern   = re.compile(r'^\s*- [pP]arameter\s*(?P<param>[^:]*):\s*(?P<desc>.*)')
-return_pattern  = re.compile(r'^\s*- [rR]eturn[s]?\s*:\s*(?P<desc>.*)')
+
+attention_pattern  = re.compile(r'^\s*- [aA]ttention\s*:\s*(?P<desc>.*)')
+author_pattern  = re.compile(r'^\s*- [aA]uthor\s*:\s*(?P<desc>.*)')
+authors_pattern  = re.compile(r'^\s*- [aA]uthors\s*:\s*(?P<desc>.*)')
+bug_pattern  = re.compile(r'^\s*- [bB]ug\s*:\s*(?P<desc>.*)')
+complexity_pattern  = re.compile(r'^\s*- [cC]omplexity\s*:\s*(?P<desc>.*)')
+copyright_pattern  = re.compile(r'^\s*- [cC]opyright\s*:\s*(?P<desc>.*)')
+date_pattern  = re.compile(r'^\s*- [dD]ate\s*:\s*(?P<desc>.*)')
+example_pattern  = re.compile(r'^\s*- [eE]xample\s*:\s*(?P<desc>.*)')
+experiment_pattern  = re.compile(r'^\s*- [eE]xperiment\s*:\s*(?P<desc>.*)')
+important_pattern  = re.compile(r'^\s*- [iI]mportant\s*:\s*(?P<desc>.*)')
+invariant_pattern  = re.compile(r'^\s*- [iI]nvariant\s*:\s*(?P<desc>.*)')
+note_pattern  = re.compile(r'^\s*- [nN]ote\s*:\s*(?P<desc>.*)')
+precondition_pattern  = re.compile(r'^\s*- [pP]recondition\s*:\s*(?P<desc>.*)')
+postcondition_pattern  = re.compile(r'^\s*- [pP]ostcondition\s*:\s*(?P<desc>.*)')
+remark_pattern  = re.compile(r'^\s*- [rR]emark\s*:\s*(?P<desc>.*)')
+requires_pattern  = re.compile(r'^\s*- [rR]equires\s*:\s*(?P<desc>.*)')
+returns_pattern  = re.compile(r'^\s*- [rR]eturns\s*:\s*(?P<desc>.*)')
+seealso_pattern  = re.compile(r'^\s*- [sS]eealso\s*:\s*(?P<desc>.*)')
+since_pattern  = re.compile(r'^\s*- [sS]ince\s*:\s*(?P<desc>.*)')
+version_pattern  = re.compile(r'^\s*- [vV]ersion\s*:\s*(?P<desc>.*)')
+warning_pattern  = re.compile(r'^\s*- [wW]arning\s*:\s*(?P<desc>.*)')
 throws_pattern  = re.compile(r'^\s*- [tT]hrow[s]?\s*:\s*(?P<desc>.*)')
 default_pattern = re.compile(r'^\s*- [dD]efault[s]?\s*:\s*(?P<desc>.*)')
 
+typical_patterns = {"attention":attention_pattern,"author":author_pattern,"authors":authors_pattern,
+"bug":bug_pattern,"complexity":complexity_pattern,"copyright":copyright_pattern,
+"date":date_pattern,"example":example_pattern,"experiment":experiment_pattern,
+"important":important_pattern,"invariant":invariant_pattern,"note":note_pattern,"precondition":precondition_pattern,
+"postcondition":postcondition_pattern,"remark":remark_pattern,"requires":requires_pattern,"returns":returns_pattern,
+"see also":seealso_pattern,"since":since_pattern,"version":version_pattern,
+"warning":warning_pattern,"throws":throws_pattern,"default":default_pattern}
+
+code_pattern = re.compile(r'`(?P<code>[^`]*)\`')
 
 # signatures
 def class_sig(name=r'[a-zA-Z_][a-zA-Z0-9_]*'):
@@ -75,7 +105,6 @@ def get_doc_block(content, line):
         l = content[i].strip()
         if l.startswith('///'):
             converted = l[3:].rstrip()
-            converted = converted.replace('`', '``')
             doc_block.insert(0, converted)
             continue
         break
@@ -83,82 +112,57 @@ def get_doc_block(content, line):
 
 
 def doc_block_to_rst(doc_block):
-    def emit_item(item):
-        if item[0] == 'param':
-            return ':parameter ' + item[1] + ': ' + item[2]
-        elif item[0] == 'return':
-            return ':returns: ' + item[1]
-        elif item[0] == 'throws':
-            return ':throws: ' + item[1]
-        elif item[0] == 'defaults':
-            return ':defaults: ' + item[1]
-
-    last_item = None
-
+    print("preparing",doc_block)
     # sphinx requires a newline between documentation and directives
     # but Swift does not
-    needs_newline = False
+    global was_doc
+    was_doc = True
+
+    def emit_doc():
+        global was_doc
+        if not was_doc:
+            was_doc = True
+            return True
+        return False
+
+    def emit_directive():
+        global was_doc
+        if was_doc:
+            was_doc = False
+            return True
+        return False
 
     for l in doc_block:
+        l = l.replace('\\','\\\\')
+        l = code_pattern.sub(r':literal:`\g<code>` ',l)
+
+        #l = emphasis_pattern.sub(r'**\g<emphasis>**',l)
+
         match = param_pattern.match(l)
         if match:
-            if last_item:
-                if needs_newline:
-                    print("emitting newline")
-                    needs_newline = False
-                    yield ''
-                yield emit_item(last_item)
             match = match.groupdict()
-            last_item = ['param', match['param'], match['desc']]
+            if emit_directive(): yield ''
+            yield ':parameter ' + match ['param'] + ': ' + match['desc']
             continue
-        match = return_pattern.match(l)
-        if match:
-            if last_item:
-                if needs_newline:
-                    needs_newline = False
-                    yield ''
-                yield emit_item(last_item)
-            match = match.groupdict()
-            last_item = ['return', match['desc']]
-            continue
-        match = throws_pattern.match(l)
-        if match:
-            if last_item:
-                if needs_newline:
-                    needs_newline = False
-                    yield ''
-                yield emit_item(last_item)
-            match = match.groupdict()
-            last_item = ['throws', match['desc']]
-            continue
-        match = default_pattern.match(l)
-        if match:
-            if last_item:
-                if needs_newline:
-                    needs_newline = False
-                    yield ''
-                yield emit_item(last_item)
-            match = match.groupdict()
-            last_item = ['defaults', match['desc']]
-            continue
-        if last_item and l == '':
-            if needs_newline:
-                    yield ''
-            yield emit_item(last_item)
-            yield ''
-            last_item = None
-            continue
-        if not last_item:
-            needs_newline = True
-            yield l
-            continue
-        last_item[len(last_item) - 1] += ' ' + l.strip()
 
-    if last_item:
-        if needs_newline:
-                    needs_newline = False
-                    yield ''
-        yield emit_item(last_item)
+        c = False #continue if required
+        for name,pattern in typical_patterns.items():
+            match = pattern.match(l)
+            if match:
+                match = match.groupdict()
+                if emit_directive(): yield ''
+                yield ':' + name + ': ' + match['desc']
+                c = True
+                break
+        if c: continue
+
+        if not was_doc and l.strip() != "":
+            yield "    " + l.strip()
+            continue
+
+        #if we've got here, assume it's doc
+        if emit_doc(): yield ''
+        yield l.strip()
 
 
 class SwiftFileIndex(object):
