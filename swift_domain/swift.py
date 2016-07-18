@@ -585,11 +585,13 @@ def make_index(app,*args):
     build_index(app)
 
 def setup(app):
-    from .autodoc import SwiftAutoDocumenter, build_index
+    from .autodoc import SwiftAutoDocumenter, ProtocolAutoDocumenter, ExtensionAutoDocumenter
     app.connect('builder-inited', make_index)
 
     app.override_domain(SwiftStandardDomain)
     app.add_autodocumenter(SwiftAutoDocumenter)
+    app.add_autodocumenter(ProtocolAutoDocumenter)
+    app.add_autodocumenter(ExtensionAutoDocumenter)
 
     app.add_domain(SwiftDomain)
     app.add_config_value('swift_search_path', ['../src'], 'env')

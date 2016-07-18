@@ -57,6 +57,12 @@ class SwiftAutoDocumenter(Documenter):
             if len(list(filter(lambda x: x['name'] in self.options.only_with_members, item['members'].index))) <= 0:
                 return
 
+        # Don't document everything if a specific type was requested
+        if self.objtype != 'swift':
+            if item['type'] != self.objtype:
+                return
+
+
         doc = SwiftFileIndex.documentation(
             item,
             indent=self.content_indent,
@@ -99,3 +105,11 @@ class SwiftAutoDocumenter(Documenter):
         if 'recursive-members' in self.options:
             for child in item['children']:
                 self.document(child, indent=indent + self.content_indent)
+
+class ProtocolAutoDocumenter(SwiftAutoDocumenter):
+    objtype = 'protocol'
+
+class ExtensionAutoDocumenter(SwiftAutoDocumenter):
+    objtype = 'extension'
+    
+
