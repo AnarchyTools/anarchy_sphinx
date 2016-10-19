@@ -358,7 +358,7 @@ class SwiftEnumCase(SwiftObjectDescription):
         return enum_case, enum_case, True
 
 
-var_sig = re.compile(r'^\s*(?P<name>[a-zA-Z_][a-zA-Z0-9_]*\b)(\s*:\s*(?P<type>[a-zA-Z_[(][a-zA-Z0-9_<>[\]()?!:, \t-]*))?(\s*=\s*(?P<value>[^{]*))?')
+var_sig = re.compile(r'^\s*(?P<name>[a-zA-Z_][a-zA-Z0-9_]*\b)(\s*:\s*(?P<type>[a-zA-Z_[(][a-zA-Z0-9_<>[\]()?!:, \t-\.]*))?(\s*=\s*(?P<value>[^{]*))?')
 
 
 class SwiftClassIvar(SwiftObjectDescription):
@@ -585,13 +585,15 @@ def make_index(app,*args):
     build_index(app)
 
 def setup(app):
-    from .autodoc import SwiftAutoDocumenter, ProtocolAutoDocumenter, ExtensionAutoDocumenter
+    from .autodoc import SwiftAutoDocumenter, ProtocolAutoDocumenter, ExtensionAutoDocumenter, EnumAutoDocumenter
     app.connect('builder-inited', make_index)
 
     app.override_domain(SwiftStandardDomain)
     app.add_autodocumenter(SwiftAutoDocumenter)
     app.add_autodocumenter(ProtocolAutoDocumenter)
     app.add_autodocumenter(ExtensionAutoDocumenter)
+    app.add_autodocumenter(EnumAutoDocumenter)
+
 
     app.add_domain(SwiftDomain)
     app.add_config_value('swift_search_path', ['../src'], 'env')

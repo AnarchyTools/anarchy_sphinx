@@ -111,5 +111,8 @@ class ProtocolAutoDocumenter(SwiftAutoDocumenter):
 
 class ExtensionAutoDocumenter(SwiftAutoDocumenter):
     objtype = 'extension'
+
+class EnumAutoDocumenter(SwiftAutoDocumenter):
+    objtype = 'enum'
     
 
