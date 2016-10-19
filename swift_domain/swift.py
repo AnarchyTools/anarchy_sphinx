@@ -358,7 +358,7 @@ class SwiftEnumCase(SwiftObjectDescription):
         return enum_case, enum_case, True
 
 
-var_sig = re.compile(r'^\s*(?P<name>[a-zA-Z_][a-zA-Z0-9_]*\b)(\s*:\s*(?P<type>[a-zA-Z_[(][a-zA-Z0-9_<>[\]()?!:, \t-]*))?(\s*=\s*(?P<value>[^{]*))?')
+var_sig = re.compile(r'^\s*(?P<name>[a-zA-Z_][a-zA-Z0-9_]*\b)(\s*:\s*(?P<type>[a-zA-Z_[(][a-zA-Z0-9_<>[\]()?!:, \t-\.]*))?(\s*=\s*(?P<value>[^{]*))?')
 
 
 class SwiftClassIvar(SwiftObjectDescription):
