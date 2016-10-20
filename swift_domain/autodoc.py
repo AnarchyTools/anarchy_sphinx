@@ -53,7 +53,7 @@ class SwiftAutoDocumenter(Documenter):
                 err)
 
     def document(self, item, indent=''):
-        member_list = self.options.members if isinstance(self.options.members, set) else []
+        member_list = self.options.members if isinstance(self.options.members, list) else []
         raw_member_list = set(map(lambda x: x.replace("/",","),self.options.raw_members)) if isinstance(self.options.raw_members, set) else []
 
         if self.options.only_with_members:
