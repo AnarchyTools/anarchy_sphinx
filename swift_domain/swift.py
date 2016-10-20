@@ -419,6 +419,8 @@ class SwiftXRefRole(XRefRole):
         self.tipe = tipe
 
     def process_link(self, env, refnode, has_explicit_title, title, target):
+        if "." in target:
+            return title, target
         return title, self.tipe+" "+target
 
 
