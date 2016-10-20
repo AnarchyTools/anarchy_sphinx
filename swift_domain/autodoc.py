@@ -18,13 +18,15 @@ class SwiftAutoDocumenter(Documenter):
         'noindex': bool_option,                 # do not add to index
         'noindex-members': bool_option,         # do not index members
         'members': members_option,              # document members, optional: list
+        'raw-members': members_set_option,      # document raw members, list
         'recursive-members': bool_option,       # recursively document members
         'undoc-members': bool_option,           # include members without docstring
         'nodocstring': bool_option,             # do not show the docstring
         'file-location': bool_option,           # add a paragraph with the file location
         'exclude-members': members_set_option,  # exclude these members
         'private-members': bool_option,         # show private members
-        'only-with-members': members_set_option  # only document if it contains the member 
+        'only-with-members': members_set_option,  # only document if it contains the member 
+        'only-with-raw-members': members_set_option #only document if it contains the raw member
     }
 
     def __init__(self, *args, **kwargs):
@@ -51,11 +53,20 @@ class SwiftAutoDocumenter(Documenter):
                 err)
 
     def document(self, item, indent=''):
-        member_list = self.options.members if isinstance(self.options.members, list) else None
+        member_list = self.options.members if isinstance(self.options.members, set) else []
+        raw_member_list = set(map(lambda x: x.replace("/",","),self.options.raw_members)) if isinstance(self.options.raw_members, set) else []
 
         if self.options.only_with_members:
             if len(list(filter(lambda x: x['name'] in self.options.only_with_members, item['members'].index))) <= 0:
                 return
+
+        if self.options.only_with_raw_members:
+            contains = False
+            for member in item['members'].index:
+                if len(list(filter(lambda x: x in member['raw'], map(lambda x: x.replace("/",","),self.options.only_with_raw_members))))>0:
+                    contains = True
+            if not contains: return
+
 
         # Don't document everything if a specific type was requested
         if self.objtype != 'swift':
@@ -75,13 +86,17 @@ class SwiftAutoDocumenter(Documenter):
             self.add_line(content, '<autodoc>')
 
         # only document members when asked to
-        if 'members' not in self.options:
+        if 'members' not in self.options and 'raw-members' not in self.options:
             return
 
-        exclude_list = self.options.exclude_members if isinstance(self.options.exclude_members, list) else []
+        exclude_list = self.options.exclude_members if isinstance(self.options.exclude_members, set) else []
         for member in item['members'].index:
             add = False
-            if not member_list or member['name'] in member_list:
+            if (not member_list and not raw_member_list):
+                add = True
+            if member['name'] in member_list:
+                add = True
+            if len(list(filter(lambda x: x in member['raw'], raw_member_list)))>0:
                 add = True
             if member['name'] in exclude_list:
                 add = False

@@ -93,12 +93,16 @@ You may set some flags to configure documentation behaviour:
 - ``:noindex:`` do not add to index
 - ``:noindex-members:`` do not index members
 - ``:members:`` document members, optional: list of members to include
+- ``:raw-members:`` document a list of raw members.  Any members containing the supplied source text in their raw source declaration are included.  Use ``/`` instead of ``,`` since the latter separates members.
 - ``:recursive-members:`` recursively document members (enums nested in classes, etc.)
 - ``:undoc-members:`` include members without docstring
 - ``:nodocstring:`` do not show the docstring
 - ``:file-location:`` add a paragraph with the file location
 - ``:exclude-members:`` exclude these members
 - ``:private-members:`` show private members
+- ``:only-with-members:`` only document an item if it contains these members.  Useful to disambiguate between multiple extensions, for example
+- ``:only-with-raw-members:`` only document an item if it contains members matching the raw source text.  Use ``/`` instead of ``,`` since the latter separates members
+
 
 
 Manual documentation for Swift types
