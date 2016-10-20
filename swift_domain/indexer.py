@@ -51,6 +51,7 @@ typical_patterns = {"attention":attention_pattern,"author":author_pattern,"autho
 "see also":seealso_pattern,"since":since_pattern,"version":version_pattern,
 "warning":warning_pattern,"throws":throws_pattern,"default":default_pattern}
 
+codeblock_pattern = re.compile(r'```')
 code_pattern = re.compile(r'`(?P<code>[^`]*)\`')
 
 # signatures
@@ -131,7 +132,21 @@ def doc_block_to_rst(doc_block):
             return True
         return False
 
+    code_mode = False
     for l in doc_block:
+        if codeblock_pattern.match(l):
+            if not code_mode:
+                code_mode = True
+                yield '.. code-block:: swift'
+                yield ''
+                continue
+            else:
+                code_mode = False
+                continue
+        if code_mode:
+            yield '    ' + l
+            continue
+
         l = l.replace('\\','\\\\')
         l = code_pattern.sub(r':literal:`\g<code>` ',l)
 
