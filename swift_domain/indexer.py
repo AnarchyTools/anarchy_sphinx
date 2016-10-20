@@ -386,6 +386,8 @@ class SwiftObjectIndex(object):
             else:
                 if item['static'] == 'class':
                     yield '.. swift:class_method:: ' + sig
+                if item['static'] == 'static':
+                    yield '.. swift:static_method:: ' + sig
                 else:
                     yield '.. swift:method:: ' + sig
 
