@@ -112,7 +112,6 @@ def get_doc_block(content, line):
 
 
 def doc_block_to_rst(doc_block):
-    print("preparing",doc_block)
     # sphinx requires a newline between documentation and directives
     # but Swift does not
     global was_doc
