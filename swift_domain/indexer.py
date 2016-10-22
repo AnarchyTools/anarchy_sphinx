@@ -87,8 +87,8 @@ string_pattern = re.compile(r'"(?:[^"\\]*(?:\\.)?)*"')
 line_comment_pattern = re.compile(r'(// .*$)')
 comment_pattern = re.compile(r'/\*(?:.)*\*/')
 
-
 def balance_braces(line, brace_count):
+    if line.startswith("//"): return brace_count
     line = string_pattern.sub("", line)
     line = comment_pattern.sub("", line)
     line = line_comment_pattern.sub("", line)
@@ -100,6 +100,7 @@ def balance_braces(line, brace_count):
 
 # fetch documentation block
 def get_doc_block(content, line):
+
     # search upwards for documentation lines
     doc_block = []
     for i in range(line, 0, -1):
@@ -109,6 +110,33 @@ def get_doc_block(content, line):
             doc_block.insert(0, converted)
             continue
         break
+
+    #did we find a standard comment?
+    if doc_block: return doc_block
+    block_detected = False
+
+    for i in reversed(content[:line+1]):
+        l = i.strip()
+        startsComment = False
+        endsComment = False
+        if l.endswith("*/"):
+            endsComment = True
+            l = l[:-2]
+            block_detected = True
+        if l.startswith("/**"):
+            startsComment = True
+            l = l[3:]
+        elif l.startswith("/*"):
+            return [] #not a doc comment
+
+        if not block_detected: #don't go searching arbitrarily far back
+            break 
+
+        #insert on top
+        doc_block.insert(0,l)
+
+        if startsComment:
+            break
     return doc_block
 
 
@@ -201,7 +229,6 @@ class SwiftFileIndex(object):
                 content = fp.readlines()
                 for (index, line) in enumerate(content):
                     braces = balance_braces(line, braces)
-
                     # track boxed context
                     for pattern in self.symbol_signatures:
                         match = pattern.match(line)
