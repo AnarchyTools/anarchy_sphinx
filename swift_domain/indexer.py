@@ -18,6 +18,7 @@ case_pattern      = re.compile(r'\s*(?P<type>case)\s+(?P<name>[a-zA-Z_][a-zA-Z0-
 
 # markdown doc patterns
 param_pattern   = re.compile(r'^\s*- [pP]arameter\s*(?P<param>[^:]*):\s*(?P<desc>.*)')
+param_abbreviated_pattern = re.compile(r'^(?P<indent>\s*)- (?P<param>.*):\s*(?P<desc>.*)')
 
 attention_pattern  = re.compile(r'^\s*- [aA]ttention\s*:\s*(?P<desc>.*)')
 author_pattern  = re.compile(r'^\s*- [aA]uthor\s*:\s*(?P<desc>.*)')
@@ -105,7 +106,7 @@ def get_doc_block(content, line):
     doc_block = []
     for i in range(line, 0, -1):
         l = content[i].strip()
-        if l.startswith('///'):
+        if l.strip().startswith('///'):
             converted = l[3:].rstrip()
             doc_block.insert(0, converted)
             continue
@@ -116,16 +117,16 @@ def get_doc_block(content, line):
     block_detected = False
 
     for i in reversed(content[:line+1]):
-        l = i.strip()
+        l = i.rstrip()
         startsComment = False
         endsComment = False
         if l.endswith("*/"):
             endsComment = True
             l = l[:-2]
             block_detected = True
-        if l.startswith("/**"):
+        if l.strip().startswith("/**"):
             startsComment = True
-            l = l[3:]
+            l = l.strip()[3:]
         elif l.startswith("/*"):
             return [] #not a doc comment
 
@@ -161,6 +162,8 @@ def doc_block_to_rst(doc_block):
         return False
 
     code_mode = False
+    parameter_mode = False
+    parameter_indent = None
     for l in doc_block:
         if codeblock_pattern.match(l):
             if not code_mode:
@@ -174,11 +177,31 @@ def doc_block_to_rst(doc_block):
         if code_mode:
             yield '    ' + l
             continue
+        if parameter_mode:
+
+            match = param_abbreviated_pattern.match(l)
+            if match == None:
+                parameter_mode = False
+                parameter_indent = None
+            else:
+                match = match.groupdict()
+                if parameter_indent and parameter_indent != match['indent']:
+                    parameter_mode = False
+                    parameter_indent = None
+                else:
+                    parameter_indent = match['indent']
+                    yield ':parameter ' + match['param'] + ': ' + match['desc']
+                    continue
 
         l = l.replace('\\','\\\\')
         l = code_pattern.sub(r':literal:`\g<code>` ',l)
 
         #l = emphasis_pattern.sub(r'**\g<emphasis>**',l)
+
+        if l == "- parameters:":
+           parameter_mode = True
+           yield ''
+           continue
 
         match = param_pattern.match(l)
         if match:
