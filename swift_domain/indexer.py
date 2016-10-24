@@ -302,25 +302,24 @@ class SwiftFileIndex(object):
         if not index:
             index = self.index
 
-        def unpack(*args):
-            return args
-
         for item in index:
             item_name = ".".join(name_prefix + [item['name']])
             if name == item_name:
                 yield item
             if len(item['children']) > 0:
-                for result in self.find(name, index=item['children'], name_prefix=[unpack(name_prefix), item['name']]):
+                new_prefix = list(name_prefix)
+                new_prefix.append(item['name'])
+                for result in self.find(name, index=item['children'], name_prefix=new_prefix):
                     yield result
 
     def __names(self,index,name_prefix):
         """Return all names the receiver could find."""
-        def unpack(*args):
-            return args
         for item in index:
             yield ".".join(name_prefix + [item['name']])
             for child in item['children']:
-                for name in child.__names(item['children'],name_prefix=[unpack(name_prefix),item['name']]):
+                new_prefix = list(name_prefix)
+                new_prefix.append(item['name'])
+                for name in child.__names(item['children'],name_prefix=new_prefix):
                     yield name
 
                 
