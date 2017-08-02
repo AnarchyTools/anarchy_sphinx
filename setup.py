@@ -11,7 +11,7 @@ from anarchy_theme import __version__
 setup(
     name='anarchy_sphinx',
     version=__version__,
-    url='https://github.com/AnarchyTools/anarchySphinx',
+    url='https://github.com/AnarchyTools/anarchy_sphinx',
     license='BSD',
     author='Johannes Schriewer',
     author_email='hallo@dunkelstern.de',
